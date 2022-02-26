@@ -14,7 +14,7 @@ const usersController = {
             .then((user) =>
                 !user
                     ? res.status(404).json({ message: `ID not found` })
-                    : res.json(user)
+                    : res.status(200).json(user)
             )
             .catch((err) => res.status(500).json(err));
     },
@@ -34,38 +34,46 @@ const usersController = {
             .then((user) => 
                 !user
                     ? res.status(404).json({ message: `User ID not found` })
-                    : res.json(user)
-            )
-            .catch((err) => res.status(500).json(err));
+                    : Thought.updateMany({ username: user.username }, { username: req.body.username })
+            .then(res.status(200).json({ message: 'The user has been updated!' }))
+            .catch((err) => res.status(500).json(err))
+      )
+        .catch((err) => res.status(500).json(err));
     },
 
     deleteUser(req, res) {
-        User.findOneAndDelete({ _id: req.params.userId })
+        User.findOneAndRemove({ _id: req.params.userId })
             .then((user) => 
                 !user
                     ? res.status(404).json({ message: `User ID not found` })
-                    : Thought.deleteMany({ userId: req.params.userId })
+                    : Thought.deleteMany({ _id: { $in: user.thoughts } })
+                    .then(res.status(200).json({ message: 'Deleted' }))
+                    .catch((err) => res.status(500).json(err))
             )
-            .then((user) =>
-                !user
-                    ? res.status(404).json({ message: `No thoughts` })
-                    : res.json({ message: `All deleted` })
-            )
+            
             .catch((err) => res.status(500).json(err));
     },
 
     addFriend(req,res) {
         User.findOneAndUpdate(
             { _id: req.params.userId },
-            { $addToSet: { friends: { _id: req.params.friendId } } },
+            { $addToSet: { friends: req.body._id } },
             { new: true }
         )
         .then((user) => 
             !user
                 ? res.status(404).json({ message: `No user found` })
-                : res.json(user)
+                : res.status(200).json({ message: 'They are friends!' })
             )
             .catch((err) => res.status(500).json(err));
+
+        User.findOneAndUpdate(
+            { _id: req.body._id },
+            { $addToSet: { friends: req.params.userId } }
+        )
+        .catch(
+            // Error handling
+        )
     },
 
     removeFriend(req, res) {
@@ -76,10 +84,18 @@ const usersController = {
         )
         .then((user) => 
             !user
-                ? res.status(404).json({ message: `this user doesnt exist you fool, how can someone who doesnt exist have a friend to unfriend you fool` })
-                : res.json(user)
+                ? res.status(404).json({ message: `User not found` })
+                : res.status(200).json({ message: 'Friend Removed!' })
         )
         .catch((err) => res.status(500).json(err));
+
+        User.findOneAndUpdate(
+            { _id: req.params.friendId },
+            { $pull: { friends: req.params.userId } }
+        )
+        .catch(
+            // Error handling
+        )
     }
 }
 

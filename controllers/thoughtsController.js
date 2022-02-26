@@ -39,8 +39,8 @@ const thoughtsController = {
         )
             .then((thought) => 
                 !thought
-                    ? res.status(404).json({ message: `Lost a thought` })
-                    : res.json(thought)
+                    ? res.status(404).json({ message: "Lost a thought" })
+                    : res.status(200).json({ message: "Thought Updated"})
             )
             .catch((err) => res.status(500).json(err));
     },
@@ -49,7 +49,7 @@ const thoughtsController = {
         Thought.findOneAndRemove({ _id: req.params.thoughtId })
             .then((thought) => 
                 !thought
-                    ? res.status(404).json({ message: `No Thoughts` })
+                    ? res.status(404).json({ message: "No Thoughts" })
                     : res.status(200).json({ message: 'Thought deleted!' })
             )
             .catch((err) => res.status(500).json(err));
@@ -64,9 +64,9 @@ const thoughtsController = {
         .then((reaction) => 
             !reaction
                 ? res.status(404).json({ message: `No Reacts` })
-                : res.json(reaction)
+                : res.status(200).json(reaction)
             )
-            .catch((err) => res.status(500).json(err));
+        .catch((err) => res.status(500).json(err));
     },
 
     removeReaction(req, res) {

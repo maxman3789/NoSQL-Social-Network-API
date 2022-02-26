@@ -1,4 +1,3 @@
-// const { USVString } = require('webidl-conversions');
 
 const connection = require('../config/connection');
 const { User, Thought } = require('../models');
@@ -19,7 +18,6 @@ connection.once('open', async () => {
   await User.collection.insertMany(userData);
 
   // Add thoughts to the collection and await the results
-  // await Thought.collection.insertMany(thoughts);
   await Thought.collection.insertMany(thoughtData);
 
   // Log out the seed data to indicate what should appear in the database

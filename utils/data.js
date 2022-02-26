@@ -4,8 +4,6 @@
 
 const ObjectId = require('mongodb').ObjectId;
 
-const reactions = ["happy", "mad", "sad", "glad", "lively", "shocked"];
-
 const userData = [
   {
     "_id": ObjectId("62030f6c64fba167d8adc058"),
@@ -71,31 +69,31 @@ const thoughtData = [
     "_id": ObjectId("62030f6c64fba167d8adc052"),
     "thoughtText": "It's hot today",
     "username": "Mike",
-    "reactions": reactions[0]
+    "reactions": []
   },
   {
     "_id": ObjectId("62030f6c64fba167d8adc053"),
     "thoughtText": "Someone turn on the fan please",
     "username": "Mike",
-    "reactions": reactions[1]
+    "reactions": []
   },
   {
     "_id": ObjectId("62030f6c64fba167d8adc054"),
     "thoughtText": "I want to go the zoo",
     "username": "Jeff",
-    "reactions": reactions[2]
+    "reactions": []
   },
   {
     "_id": ObjectId("62030f6c64fba167d8adc055"),
     "thoughtText": "Howdy",
     "username": "Matt",
-    "reactions": reactions[3]
+    "reactions": []
   },
   {
     "_id": ObjectId("62030f6c64fba167d8adc056"),
     "thoughtText": "Time to finish this",
     "username": "James",
-    "reactions": reactions[4]
+    "reactions": []
   }
 ]
 
