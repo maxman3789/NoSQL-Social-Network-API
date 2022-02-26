@@ -3,18 +3,17 @@ const { User, Thought } = require('../models');
 const thoughtsController = {
     getThoughts(req, res) {
         Thought.find()
-            .then((thoughts) => res.json(thoughts))
+         .select('-__v')
+            .then((thoughts) => res.status(200).json(thoughts))
             .catch((err) => res.status(500).json(err));
     },
 
     getThoughtById(req, res) {
         Thought.findOne({ _id: req.params.thoughtId })
             .select("-__v")
-            .then((thought) =>
-                !thought
-                    ? res.status(404).json({ message: `Thought Not Found` })
-                    : res.json(thought)
-            )
+            .then((thought) => !thought
+            ? res.status(400).json({ message: 'No thought with that ID' })
+            : res.status(200).json(thought))
             .catch((err) => res.status(500).json(err));
     },
 
@@ -22,16 +21,13 @@ const thoughtsController = {
         Thought.create(req.body)
             .then((thought) => {
                 return User.findOneAndUpdate(
-                    { _id: req.body.userId },
+                    { username: req.body.username },
                     { $addToSet: { thoughts: thought._id } },
                     { new: true }
-                );
+                )
+                .then(res.status(200).json(thought))
+                .catch((err) => res.status(500).json(err));
             })
-            .then((user) =>
-                !user
-                    ? res.status(404).json({ message: `Not found` })
-                    : res.json(`thoughtt`)
-            )
             .catch((err) => res.status(500).json(err));
     },
 
@@ -54,16 +50,7 @@ const thoughtsController = {
             .then((thought) => 
                 !thought
                     ? res.status(404).json({ message: `No Thoughts` })
-                    : User.findOneAndUpdate(
-                        { ThoughtId: req.params.thoughtId },
-                        { $pull: { thoughts: req.params.thoughtId } },
-                        { new: true }
-                    )
-            )
-            .then((user) =>
-                !user
-                    ? res.status(404).json({ message: `Thought Delete` })
-                    : res.json({ message: `No more thoughts` })
+                    : res.status(200).json({ message: 'Thought deleted!' })
             )
             .catch((err) => res.status(500).json(err));
     },
@@ -74,10 +61,10 @@ const thoughtsController = {
             { $addToSet: { reactions: req.body } },
             { new: true }
         )
-        .then((thought) => 
-            !thought
+        .then((reaction) => 
+            !reaction
                 ? res.status(404).json({ message: `No Reacts` })
-                : res.json(thought)
+                : res.json(reaction)
             )
             .catch((err) => res.status(500).json(err));
     },
@@ -85,13 +72,13 @@ const thoughtsController = {
     removeReaction(req, res) {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $pull: { reactions: { _id: req.params.reactionId } } },
+            { $pull: { reactions: { reactionId: req.params.reactionId } } },
             { new: true } 
         )
         .then((thought) => 
             !thought
                 ? res.status(404).json({ message: `Can't remove React` })
-                : res.json(thought)
+                : res.status(200).json({ message: 'Reaction deleted!' })
         )
         .catch((err) => res.status(500).json(err));
     }

@@ -1,146 +1,102 @@
-const names = [
-    'Aaran',
-    'Aaren',
-    'Aarez',
-    'Aarman',
-    'Aaron',
-    'Aaron-James',
-    'Aarron',
-    'Aaryan',
-    'Aaryn',
-    'Aayan',
-    'Aazaan',
-    'Abaan',
-    'Abbas',
-    'Abdallah',
-    'Abdalroof',
-    'Abdihakim',
-    'Abdirahman',
-    'Abdisalam',
-    'Abdul',
-    'Abdul-Aziz',
-    'Abdulbasir',
-    'Abdulkadir',
-    'Abdulkarem',
-    'Smith',
-    'Jones',
-    'Coollastname',
-    'enter_name_here',
-    'Ze',
-    'Zechariah',
-    'Zeek',
-    'Zeeshan',
-    'Zeid',
-    'Zein',
-    'Zen',
-    'Zendel',
-    'Zenith',
-    'Zennon',
-    'Zeph',
-    'Zerah',
-    'Zhen',
-    'Zhi',
-    'Zhong',
-    'Zhuo',
-    'Zi',
-    'Zidane',
-    'Zijie',
-    'Zinedine',
-    'Zion',
-    'Zishan',
-    'Ziya',
-    'Ziyaan',
-    'Zohaib',
-    'Zohair',
-    'Zoubaeir',
-    'Zubair',
-    'Zubayr',
-    'Zuriel',
-    'Xander',
-    'Jared',
-    'Courtney',
-    'Gillian',
-    'Clark',
-    'Jared',
-    'Grace',
-    'Kelsey',
-    'Tamar',
-    'Alex',
-    'Mark',
-    'Tamar',
-    'Farish',
-    'Sarah',
-    'Nathaniel',
-    'Parker',
-  ];
-  
-  const thoughts = [
-    'Decision Tracker',
-    'Find My Phone',
-    'Learn Piano',
-    'Starbase Defender',
-    'Tower Defense',
-    'Monopoly Money Manager',
-    'Movie trailers',
-    'Hello world',
-    'Stupid Social Media App',
-    'Notes',
-    'Messages',
-    'Email',
-    'Compass',
-    'Firefox',
-    'Running app',
-    'Cooking app',
-    'Poker',
-    'Deliveries',
-    'Still Warm',
-    'Needs more'
-  ];
+// researched tips on populating data https://stackoverflow.com/questions/2805613/creating-populating-javascript-custom-object
+// https://stackoverflow.com/questions/21076460/how-to-convert-a-string-to-objectid-in-nodejs-mongodb-native-driver
+// https://www.mongodb.com/community/forums/t/mongodb-nodejs-driver-objectid-tostring-acts-as-objectid-valueof-and-vice-versa/129147
 
-  const reactions = [
-      'fancy',
-      'mad',
-      'happy',
-      'glad',
-      'afraid',
-      'ecstatic',
-      'hate',
-      'glee',
-      'sad'
-  ]
-  
-  // Get a random item given an array
-  const getRandomArrItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
-  
-  // Gets a random full name
-  const getRandomName = () =>
-    `${getRandomArrItem(names)} ${getRandomArrItem(names)}`;
-  
-  // Function to generate random thoughts that we can add to student object.
-  const getThoughts = (int) => {
-    const results = [];
-    for (let i = 0; i < int; i++) {
-      results.push({
-        thoughtTxt: getRandomArrItem(thoughts),
-        names: getRandomName(),
-        reactions: [...getReactions(2)]
-      });
-    }
-    return results;
-  };
+const ObjectId = require('mongodb').ObjectId;
 
-// Function to generate a random reaction associated with a random user to a thought
-const getReactions = (int) => {
-    let results = [];
-    for (let i = 0; i < int; i++) {
-      results.push({
-        reaction: getRandomArrItem(reactions),
-        names: getRandomName(),
-      });
-    }
-    return results;
-};
-  
-  // Export the functions for use in seed.js
-  module.exports = { getRandomName, getThoughts };
-  
+const reactions = ["happy", "mad", "sad", "glad", "lively", "shocked"];
+
+const userData = [
+  {
+    "_id": ObjectId("62030f6c64fba167d8adc058"),
+    "username": "Mike",
+    "email": "Mike@gmail.com",
+    "thoughts": [
+      ObjectId("62030f6c64fba167d8adc052"),
+      ObjectId("62030f6c64fba167d8adc053")
+    ],
+    "friends": [
+      ObjectId("62030f6c64fba167d8adc05c"),
+      ObjectId("62030f6c64fba167d8adc05b")
+    ]
+  },
+  {
+    "_id": ObjectId("62030f6c64fba167d8adc059"),
+    "username": "Jeff",
+    "email": "Jeff@gmail.com",
+    "thoughts": [
+      ObjectId("62030f6c64fba167d8adc054")
+    ],
+    "friends": [
+      ObjectId("62030f6c64fba167d8adc05c")
+    ]
+  },
+  {
+    "_id": ObjectId("62030f6c64fba167d8adc05a"),
+    "username": "Matt",
+    "email": "Matt@gmail.com",
+    "thoughts": [
+      ObjectId("62030f6c64fba167d8adc055")
+    ],
+    "friends": [
+      ObjectId("62030f6c64fba167d8adc05c")
+    ]
+  },
+  {
+    "_id": ObjectId("62030f6c64fba167d8adc05b"),
+    "username": "Sam",
+    "email": "Sam@gmail.com",
+    "thoughts": [],
+    "friends": [
+      ObjectId("62030f6c64fba167d8adc058")
+    ]
+  },
+  {
+    "_id": ObjectId("62030f6c64fba167d8adc05c"),
+    "username": "James",
+    "email": "James@gmail.com",
+    "thoughts": [
+      ObjectId("62030f6c64fba167d8adc056")
+    ],
+    "friends": [
+      ObjectId("62030f6c64fba167d8adc058"),
+      ObjectId("62030f6c64fba167d8adc059"),
+      ObjectId("62030f6c64fba167d8adc05a")
+    ]
+  }
+]
+
+const thoughtData = [
+  {
+    "_id": ObjectId("62030f6c64fba167d8adc052"),
+    "thoughtText": "It's hot today",
+    "username": "Mike",
+    "reactions": reactions[0]
+  },
+  {
+    "_id": ObjectId("62030f6c64fba167d8adc053"),
+    "thoughtText": "Someone turn on the fan please",
+    "username": "Mike",
+    "reactions": reactions[1]
+  },
+  {
+    "_id": ObjectId("62030f6c64fba167d8adc054"),
+    "thoughtText": "I want to go the zoo",
+    "username": "Jeff",
+    "reactions": reactions[2]
+  },
+  {
+    "_id": ObjectId("62030f6c64fba167d8adc055"),
+    "thoughtText": "Howdy",
+    "username": "Matt",
+    "reactions": reactions[3]
+  },
+  {
+    "_id": ObjectId("62030f6c64fba167d8adc056"),
+    "thoughtText": "Time to finish this",
+    "username": "James",
+    "reactions": reactions[4]
+  }
+]
+
+module.exports = { userData, thoughtData };
